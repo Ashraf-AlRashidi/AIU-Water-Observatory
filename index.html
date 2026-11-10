@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AIU Eco-Campus Water Observatory | SDG 6</title>
+<meta name="color-scheme" content="dark">
+
+<!-- Fonts & Icons -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Inter:wght@400;500;600&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* ========== Design tokens (change colors here only) ========== */
+:root {
+  --abyss: #0d0a1f;      /* page background */
+  --deep: #151030;       /* alternate section background */
+  --slate: #1d1745;      /* cards / panels */
+  --line: #332a6b;       /* borders */
+  --a1: #a28bff;         /* primary accent: violet */
+  --a1-rgb: 162, 139, 255;
+  --a2: #c8ff4d;         /* secondary accent: lime */
+  --a2-rgb: 200, 255, 77;
+  --text: #f0ecff;
+  --muted: #a49fc7;
+  --radius: 18px;
+  --font-head: 'Sora', 'Cairo', sans-serif;
+  --font-body: 'Inter', 'Cairo', sans-serif;
+}
+/* Arabic uses Cairo everywhere */
+[dir="rtl"] { --font-head: 'Cairo', sans-serif; --font-body: 'Cairo', sans-serif; }
+[dir="rtl"] h1, [dir="rtl"] h2, [dir="rtl"] h3 { letter-spacing: 0; line-height: 1.35; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+body { background: var(--abyss); color: var(--text); font-family: var(--font-body); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { font-family: var(--font-head); line-height: 1.15; letter-spacing: -0.01em; }
+:focus-visible { outline: 2px solid var(--a1); outline-offset: 3px; }
+
+.wrap { width: min(1080px, 100% - 2.5rem); margin-inline: auto; }
+section { padding: 5.5rem 0; }
+.section-head { max-width: 640px; margin-bottom: 2.5rem; }
+.section-head h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); margin-bottom: .75rem; }
+.section-head p { color: var(--muted); }
+
+/* ========== Top bar ========== */
+.topbar { position: fixed; inset: 0 0 auto 0; z-index: 20; background: rgba(13,10,31,.82); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line); }
+.topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 58px; gap: 1rem; }
+.brand { font-family: var(--font-head); font-weight: 700; text-decoration: none; display: flex; gap: .55rem; align-items: center; color: var(--text); }
+.brand i { color: var(--a1); }
+.topbar nav { display: flex; gap: 1.4rem; font-size: .92rem; margin-inline-start: auto; }
+.topbar nav a { color: var(--muted); text-decoration: none; transition: color .2s; }
+.topbar nav a:hover { color: var(--a2); }
+.lang { background: transparent; color: var(--a2); border: 1.5px solid var(--a2); border-radius: 999px; padding: .3rem .9rem; font: 600 .88rem var(--font-body); cursor: pointer; transition: background .2s, color .2s; }
+.lang:hover { background: var(--a2); color: #1a2300; }
+@media (max-width: 560px) { .topbar nav { display: none; } .brand span { font-size: .9rem; } }
+
+/* ========== Buttons ========== */
+.btn { display: inline-flex; align-items: center; gap: .6rem; padding: .9rem 1.6rem; border-radius: 999px; border: 1.5px solid transparent; font: 600 1rem var(--font-body); cursor: pointer; text-decoration: none; transition: transform .2s, box-shadow .25s, background .25s, color .25s; }
+.btn-primary { background: var(--a1); color: #150c40; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(var(--a1-rgb), .4); }
+.btn-ghost { border-color: var(--a2); color: var(--a2); background: transparent; }
+.btn-ghost:hover { background: var(--a2); color: #1a2300; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(var(--a2-rgb), .3); }
+
+/* ========== Hero ========== */
+.hero { position: relative; overflow: hidden; min-height: 100svh; display: flex; align-items: center; padding: 8rem 0 9rem;
+  background: radial-gradient(900px 500px at 80% 10%, rgba(var(--a1-rgb), .2), transparent 60%), radial-gradient(700px 500px at 0% 100%, rgba(var(--a2-rgb), .07), transparent 60%), var(--abyss); }
+.hero h1 { font-size: clamp(2.3rem, 7vw, 4.4rem); font-weight: 800; max-width: 14ch; margin-bottom: 1.4rem; }
+[dir="rtl"] .hero h1 { max-width: 18ch; }
+.hero p { font-size: clamp(1.05rem, 2.2vw, 1.3rem); color: var(--muted); max-width: 52ch; margin-bottom: 2.2rem; }
+.hero .actions { display: flex; flex-wrap: wrap; gap: 1rem; }
+.hero .badge { display: inline-block; margin-bottom: 1.4rem; padding: .35rem .9rem; border: 1px solid var(--line); border-radius: 999px; color: var(--a1); font-size: .85rem; }
+.waves { position: absolute; left: 0; bottom: -1px; width: 100%; height: 110px; }
+.waves path { animation: drift 9s ease-in-out infinite alternate; }
+.waves path:nth-child(2) { animation-duration: 13s; animation-direction: alternate-reverse; }
+@keyframes drift { from { transform: translateX(-3%); } to { transform: translateX(3%); } }
+
+/* ========== Solutions ========== */
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+.card { background: var(--slate); border: 1px solid var(--line); border-radius: var(--radius); padding: 2rem 1.8rem; transition: transform .3s, border-color .3s, box-shadow .3s; }
+.card:hover { transform: translateY(-8px); border-color: var(--a1); box-shadow: 0 16px 40px rgba(var(--a1-rgb), .18); }
+.card .icon { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 1.5rem; margin-bottom: 1.3rem; color: var(--a1); background: rgba(var(--a1-rgb), .12); transition: background .3s, color .3s; }
+.card:nth-child(2) .icon { color: var(--a2); background: rgba(var(--a2-rgb), .1); }
+.card:hover .icon { background: var(--a1); color: #150c40; }
+.card:nth-child(2):hover .icon { background: var(--a2); color: #1a2300; }
+.card h3 { font-size: 1.2rem; margin-bottom: .6rem; }
+.card p { color: var(--muted); font-size: .97rem; }
+
+/* ========== Interactive sections ========== */
+.panel-section { background: var(--deep); }
+.panel { background: var(--slate); border: 1px solid var(--line); border-radius: var(--radius); padding: clamp(1.5rem, 4vw, 2.6rem); max-width: 720px; }
+label { display: block; font-weight: 600; margin-bottom: .5rem; font-size: .95rem; }
+input[type="number"], input[type="text"], textarea { width: 100%; background: var(--abyss); color: var(--text); border: 1.5px solid var(--line); border-radius: 12px; padding: .85rem 1rem; font: 1rem var(--font-body); transition: border-color .2s, box-shadow .2s; }
+input::placeholder, textarea::placeholder { color: #6a649b; }
+input:focus, textarea:focus { outline: none; border-color: var(--a1); box-shadow: 0 0 0 3px rgba(var(--a1-rgb), .22); }
+textarea { min-height: 120px; resize: vertical; }
+.field { margin-bottom: 1.4rem; }
+.row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end; }
+.row .field { flex: 1 1 200px; margin-bottom: 0; }
+
+/* Calculator result (hidden until calculated) */
+.result { margin-top: 1.8rem; padding: 0 1.4rem; border-radius: 14px; background: rgba(var(--a2-rgb), .07); border: 1px solid rgba(var(--a2-rgb), .4); max-height: 0; opacity: 0; overflow: hidden; transform: translateY(14px) scale(.98); transition: max-height .6s ease, opacity .5s ease, transform .5s cubic-bezier(.2,1.3,.4,1), padding .4s; }
+.result.show { max-height: 420px; opacity: 1; transform: none; padding: 1.4rem; }
+.result p { font-size: 1.1rem; }
+.result strong { color: var(--a2); }
+.bars { margin-top: 1.2rem; display: grid; gap: .8rem; font-size: .85rem; color: var(--muted); }
+.bar { height: 12px; border-radius: 99px; background: var(--abyss); overflow: hidden; margin-top: .3rem; }
+.bar span { display: block; height: 100%; width: 0; border-radius: 99px; transition: width 1s cubic-bezier(.2,.8,.2,1); }
+.bar .you { background: linear-gradient(90deg, var(--a1), #ff7ad9); }
+.bar .goal { background: var(--a2); }
+
+/* Photo upload */
+.upload { display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 1.1rem 1.2rem; border: 2px dashed var(--line); border-radius: 12px; color: var(--muted); font-weight: 400; transition: border-color .2s, color .2s, background .2s; }
+.upload:hover, .upload:focus-within { border-color: var(--a1); color: var(--text); background: rgba(var(--a1-rgb), .07); }
+.upload i { font-size: 1.6rem; color: var(--a1); }
+.upload input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+
+/* Success state */
+.success { text-align: center; padding: 1rem 0; display: none; }
+.success.show { display: block; animation: pop .6s cubic-bezier(.2,1.4,.4,1); }
+.success .check { width: 84px; height: 84px; margin: 0 auto 1.2rem; border-radius: 50%; display: grid; place-items: center; font-size: 2.2rem; color: #1a2300; background: var(--a2); box-shadow: 0 0 40px rgba(var(--a2-rgb), .4); }
+.success h3 { margin-bottom: .6rem; font-size: 1.5rem; }
+.success p { color: var(--muted); max-width: 44ch; margin: 0 auto 1.5rem; }
+@keyframes pop { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: none; } }
+
+/* ========== Footer ========== */
+footer { background: #080616; border-top: 1px solid var(--line); padding: 2.5rem 0; text-align: center; color: var(--muted); font-size: .92rem; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition-duration: .01ms !important; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ========== Top bar ========== -->
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top"><i class="fa-solid fa-droplet"></i> <span data-i18n="brand"></span></a>
+    <nav aria-label="Main">
+      <a href="#solutions" data-i18n="nav1"></a>
+      <a href="#calculator" data-i18n="nav2"></a>
+      <a href="#report" data-i18n="nav3"></a>
+    </nav>
+    <!-- Language switch: shows the language you will switch TO -->
+    <button class="lang" id="langBtn" type="button" aria-label="Switch language"></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ========== 1. Hero ========== -->
+<section class="hero">
+  <div class="wrap">
+    <span class="badge"><i class="fa-solid fa-earth-africa"></i> <span data-i18n="badge"></span></span>
+    <h1 data-i18n="h1"></h1>
+    <p data-i18n="sub"></p>
+    <div class="actions">
+      <a href="#calculator" class="btn btn-primary"><i class="fa-solid fa-calculator"></i> <span data-i18n="cta1"></span></a>
+      <a href="#report" class="btn btn-ghost"><i class="fa-solid fa-triangle-exclamation"></i> <span data-i18n="cta2"></span></a>
+    </div>
+  </div>
+  <svg class="waves" viewBox="0 0 1440 110" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="rgba(162,139,255,.14)" d="M0 50 C240 100 480 0 720 40 S1200 100 1440 40 V110 H0Z"/>
+    <path fill="#0d0a1f" d="M0 75 C300 30 560 110 840 70 S1260 40 1440 80 V110 H0Z"/>
+  </svg>
+</section>
+
+<!-- ========== 2. Solutions ========== -->
+<section id="solutions">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 data-i18n="solHead"></h2>
+      <p data-i18n="solSub"></p>
+    </div>
+    <div class="cards">
+      <article class="card"><div class="icon"><i class="fa-solid fa-microchip"></i></div><h3 data-i18n="c1t"></h3><p data-i18n="c1d"></p></article>
+      <article class="card"><div class="icon"><i class="fa-solid fa-leaf"></i></div><h3 data-i18n="c2t"></h3><p data-i18n="c2d"></p></article>
+      <article class="card"><div class="icon"><i class="fa-solid fa-trophy"></i></div><h3 data-i18n="c3t"></h3><p data-i18n="c3d"></p></article>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3. Water Gap Calculator ========== -->
+<section id="calculator" class="panel-section">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 data-i18n="calcHead"></h2>
+      <p data-i18n="calcSub"></p>
+    </div>
+    <div class="panel">
+      <form id="calcForm" novalidate>
+        <div class="row">
+          <div class="field">
+            <label for="minutes" data-i18n="minLabel"></label>
+            <input type="number" id="minutes" min="1" max="120" step="1" inputmode="numeric" data-i18n-ph="minPh" required>
+          </div>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-droplet"></i> <span data-i18n="calcBtn"></span></button>
+        </div>
+      </form>
+      <div class="result" id="result" role="status" aria-live="polite">
+        <p id="resultText"></p>
+        <div class="bars">
+          <div><span data-i18n="barYou"></span><div class="bar"><span class="you" id="barYou"></span></div></div>
+          <div><span data-i18n="barGoal"></span><div class="bar"><span class="goal" id="barGoal"></span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 4. Report a Leak ========== -->
+<section id="report">
+  <div class="wrap">
+    <div class="section-head">
+      <h2 data-i18n="repHead"></h2>
+      <p data-i18n="repSub"></p>
+    </div>
+    <div class="panel">
+      <form id="leakForm">
+        <div class="field">
+          <label for="location" data-i18n="locLabel"></label>
+          <input type="text" id="location" data-i18n-ph="locPh" required>
+        </div>
+        <div class="field">
+          <label for="issue" data-i18n="issueLabel"></label>
+          <textarea id="issue" data-i18n-ph="issuePh" required></textarea>
+        </div>
+        <div class="field">
+          <label for="photo" data-i18n="photoLabel"></label>
+          <label class="upload" for="photo">
+            <i class="fa-solid fa-camera"></i>
+            <span id="fileName"></span>
+            <input type="file" id="photo" accept="image/*">
+          </label>
+        </div>
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i> <span data-i18n="submit"></span></button>
+      </form>
+
+      <div class="success" id="success" role="status" aria-live="polite">
+        <div class="check"><i class="fa-solid fa-check"></i></div>
+        <h3 data-i18n="okH"></h3>
+        <p data-i18n="okP"></p>
+        <button type="button" class="btn btn-ghost" id="again"><i class="fa-solid fa-rotate-left"></i> <span data-i18n="again"></span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========== 5. Footer ========== -->
+<footer>
+  <div class="wrap"><p data-i18n="footer"></p></div>
+</footer>
+
+<script>
+/* ---------- Translations (English / Arabic) ---------- */
+const T = {
+  en: {
+    brand: 'AIU Water Observatory', nav1: 'Solutions', nav2: 'Calculator', nav3: 'Report',
+    badge: 'SDG 6: Clean Water and Sanitation',
+    h1: 'AIU Eco-Campus Water Observatory',
+    sub: 'Empowering our campus to achieve SDG 6 through IoT, Gamification, and Citizen Science.',
+    cta1: 'Calculate Your Impact', cta2: 'Report a Leak',
+    solHead: 'Our Innovative Solutions',
+    solSub: 'Three connected tools that find waste, save water, and reward good habits across campus.',
+    c1t: 'Smart IoT Monitoring', c1d: 'Deploying sensors & LoRaWAN to detect pipeline leaks in real-time.',
+    c2t: 'Green Infrastructure', c2d: 'Rainwater harvesting and smart drip irrigation using drought-resistant plants.',
+    c3t: 'Eco-Points Gamification', c3d: 'Scanning QR codes on water dispensers to earn rewards for using reusable bottles.',
+    calcHead: 'The Water Gap Calculator', calcSub: 'Are you underestimating your water use?',
+    minLabel: 'Estimated Shower Time (in minutes)', minPh: 'e.g. 10', calcBtn: 'Calculate',
+    barYou: 'Your shower', barGoal: 'Sustainable 4-minute shower',
+    invalid: 'Enter your shower time in minutes (1 or more) to see your result.',
+    result: (l) => `You used approximately <strong>${l} Liters</strong> of water! A sustainable 4-minute shower uses only 48 Liters. Save water, earn Eco-Points!`,
+    repHead: 'Spot a Leak? Report it Instantly!', repSub: 'Every report helps Facilities Management fix problems faster.',
+    locLabel: 'Location', locPh: 'e.g. Building A, 2nd Floor Restroom',
+    issueLabel: 'Issue Description', issuePh: 'What did you see? Dripping tap, pooling water, broken pipe…',
+    photoLabel: 'Upload Photo', photoText: 'Tap to take or choose a photo', submit: 'Submit Report',
+    okH: 'Report received',
+    okP: 'Thank you! Your report and photo have been sent to the AIU Facilities Management. You just earned 50 Eco-Points!',
+    again: 'Report another leak',
+    footer: 'Course: Climate Change & Sustainability (GEO217) - Alamein International University.'
+  },
+  ar: {
+    brand: 'مرصد المياه – AIU', nav1: 'الحلول', nav2: 'الحاسبة', nav3: 'بلّغ',
+    badge: 'الهدف السادس: المياه النظيفة والنظافة الصحية',
+    h1: 'مرصد المياه للحرم الجامعي الأخضر – AIU',
+    sub: 'نمكّن جامعتنا من تحقيق الهدف السادس للتنمية المستدامة عبر إنترنت الأشياء والتلعيب والعلم المجتمعي.',
+    cta1: 'احسب أثرك', cta2: 'بلّغ عن تسريب',
+    solHead: 'حلولنا المبتكرة',
+    solSub: 'ثلاث أدوات مترابطة تكشف الهدر وتوفر المياه وتكافئ العادات الجيدة في الحرم الجامعي.',
+    c1t: 'المراقبة الذكية بإنترنت الأشياء', c1d: 'نركّب حساسات وشبكة LoRaWAN لاكتشاف تسريبات المواسير لحظة حدوثها.',
+    c2t: 'البنية التحتية الخضراء', c2d: 'حصاد مياه الأمطار والري بالتنقيط الذكي باستخدام نباتات تتحمل الجفاف.',
+    c3t: 'نقاط البيئة والتلعيب', c3d: 'امسح رمز QR على برادات المياه واكسب مكافآت عند استخدام الزجاجات القابلة لإعادة الاستخدام.',
+    calcHead: 'حاسبة فجوة المياه', calcSub: 'هل تقلّل من تقدير استهلاكك للمياه؟',
+    minLabel: 'مدة الاستحمام التقديرية (بالدقائق)', minPh: 'مثال: 10', calcBtn: 'احسب',
+    barYou: 'استحمامك', barGoal: 'استحمام مستدام لمدة 4 دقائق',
+    invalid: 'اكتب مدة استحمامك بالدقائق (1 أو أكثر) لتظهر النتيجة.',
+    result: (l) => `استهلكت حوالي <strong>${l} لترًا</strong> من المياه! الاستحمام المستدام لمدة 4 دقائق يستهلك 48 لترًا فقط. وفّر المياه واكسب نقاط البيئة!`,
+    repHead: 'لاحظت تسريبًا؟ بلّغ فورًا!', repSub: 'كل بلاغ يساعد إدارة المرافق على إصلاح المشكلة أسرع.',
+    locLabel: 'الموقع', locPh: 'مثال: المبنى A، دورة مياه الدور الثاني',
+    issueLabel: 'وصف المشكلة', issuePh: 'إيه اللي شفته؟ حنفية بتنقّط، مياه متجمعة، ماسورة مكسورة…',
+    photoLabel: 'رفع صورة', photoText: 'اضغط لالتقاط صورة أو اختيارها', submit: 'إرسال البلاغ',
+    okH: 'تم استلام البلاغ',
+    okP: 'شكرًا لك! تم إرسال بلاغك وصورتك إلى إدارة المرافق في جامعة العلمين الدولية. لقد كسبت 50 نقطة بيئة!',
+    again: 'بلّغ عن تسريب آخر',
+    footer: 'المقرر: التغير المناخي والاستدامة (GEO217) - جامعة العلمين الدولية.'
+  }
+};
+
+let lang = 'en';
+let lastLiters = null;      // keeps the result so it can be re-translated
+let lastInvalid = false;
+const $ = (id) => document.getElementById(id);
+const fileName = $('fileName'), photo = $('photo');
+
+/* Apply a language to every marked element */
+function setLang(l) {
+  lang = l;
+  document.documentElement.lang = l;
+  document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = T[l][el.dataset.i18n]);
+  document.querySelectorAll('[data-i18n-ph]').forEach(el => el.placeholder = T[l][el.dataset.i18nPh]);
+  $('langBtn').textContent = l === 'ar' ? 'English' : 'العربية';
+  if (!photo.files.length) fileName.textContent = T[l].photoText;
+  if (lastLiters !== null) $('resultText').innerHTML = T[l].result(lastLiters);
+  if (lastInvalid) $('resultText').textContent = T[l].invalid;
+  try { localStorage.setItem('aiu-lang', l); } catch (e) {}
+}
+$('langBtn').addEventListener('click', () => setLang(lang === 'en' ? 'ar' : 'en'));
+
+/* ---------- Water Gap Calculator ---------- */
+const result = $('result'), barYou = $('barYou'), barGoal = $('barGoal');
+
+$('calcForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const minutes = parseFloat($('minutes').value);
+
+  if (!minutes || minutes <= 0) {                 // invalid input
+    lastLiters = null; lastInvalid = true;
+    $('resultText').textContent = T[lang].invalid;
+    barYou.style.width = barGoal.style.width = '0';
+    result.classList.add('show');
+    $('minutes').focus();
+    return;
+  }
+
+  lastInvalid = false;
+  lastLiters = Math.round(minutes * 12);          // ~12 L per minute
+  $('resultText').innerHTML = T[lang].result(lastLiters);
+
+  const max = Math.max(lastLiters, 48);           // scale bars to the larger value
+  result.classList.add('show');
+  barYou.style.width = barGoal.style.width = '0';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    barYou.style.width = (lastLiters / max * 100) + '%';
+    barGoal.style.width = (48 / max * 100) + '%';
+  }));
+});
+
+/* ---------- Leak report form ---------- */
+const leakForm = $('leakForm'), success = $('success');
+
+photo.addEventListener('change', () => {
+  fileName.textContent = photo.files.length ? photo.files[0].name : T[lang].photoText;
+});
+
+leakForm.addEventListener('submit', (e) => {
+  e.preventDefault();                 // no real submit
+  leakForm.style.display = 'none';
+  success.classList.add('show');
+});
+
+$('again').addEventListener('click', () => {
+  leakForm.reset();
+  fileName.textContent = T[lang].photoText;
+  success.classList.remove('show');
+  leakForm.style.display = '';
+});
+
+/* ---------- Start: remembered language, else English ---------- */
+let saved = 'en';
+try { saved = localStorage.getItem('aiu-lang') || 'en'; } catch (e) {}
+setLang(saved === 'ar' ? 'ar' : 'en');
+</script>
+</body>
+</html>
